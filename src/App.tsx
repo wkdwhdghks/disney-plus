@@ -1,11 +1,13 @@
 import Nav from "./components/Nav";
 import styled from "styled-components";
 import "./App.css";
+import Banner from "./components/Banner";
 
 export default function App() {
   return (
     <Container>
       <Nav />
+      <Banner />
     </Container>
   );
 }
