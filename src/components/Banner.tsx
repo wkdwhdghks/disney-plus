@@ -35,7 +35,7 @@ export default function Banner(): JSX.Element {
 
   const truncate = (str: string | undefined, n: number) => {
     if (typeof str === "string") {
-      return str?.length > n ? str.substr(0, n) + "..." : str;
+      return str.length > n ? str.substr(0, n) + "..." : str;
     }
   };
 
