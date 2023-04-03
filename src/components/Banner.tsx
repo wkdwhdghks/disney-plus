@@ -47,7 +47,7 @@ export default function Banner(): JSX.Element {
         <Container>
           <HomeContainer>
             <Iframe
-              src={`https://www.youtube-nocookie.com/embed/${movie?.videos?.results[0]?.key}?&autoplay=1&loop=1&mute=1&playlist=${movie?.videos?.results[0]?.key}`}
+              src={`https://www.youtube-nocookie.com/embed/${movie?.videos?.results[0]?.key}?controls=0&autoplay=1&loop=1&mute=1&playlist=${movie?.videos?.results[0]?.key}`}
               width="640"
               height="360"
               frameBorder="0"

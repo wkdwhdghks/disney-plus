@@ -1,13 +1,15 @@
 import Nav from "./components/Nav";
 import styled from "styled-components";
-import "./App.css";
 import Banner from "./components/Banner";
+import Category from "./components/Category";
+import "./App.css";
 
 export default function App() {
   return (
     <Container>
       <Nav />
       <Banner />
+      <Category />
     </Container>
   );
 }
