@@ -1,6 +1,7 @@
 import axios from "../api/axios";
 import { useCallback, useEffect, useState } from "react";
 import "./Row.css";
+import MovieModal from "./MovieModal";
 
 export default function Row({
   title,
@@ -16,7 +17,10 @@ export default function Row({
     backdrop_path: string;
     title: string;
   }
+
   const [movies, setMovies] = useState<MovieInfo[]>([]);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [movieSelected, setMovieSelection] = useState({});
 
   const fetchMovieData = useCallback(async () => {
     const response = await axios.get(fetchUrl);
@@ -26,6 +30,11 @@ export default function Row({
   useEffect(() => {
     fetchMovieData();
   }, [fetchMovieData]);
+
+  const handleClick = (movie: MovieInfo) => {
+    setModalOpen(true);
+    setMovieSelection(movie);
+  };
 
   return (
     <div>
@@ -48,6 +57,7 @@ export default function Row({
               className="row__poster"
               src={`https://images.tmdb.org/t/p/original/${movie.backdrop_path}`}
               alt={movie.title}
+              onClick={() => handleClick(movie)}
             ></img>
           ))}
         </div>
@@ -62,6 +72,9 @@ export default function Row({
           </span>
         </div>
       </div>
+      {modalOpen && (
+        <MovieModal {...movieSelected} setModalOpen={setModalOpen} />
+      )}
     </div>
   );
 }
