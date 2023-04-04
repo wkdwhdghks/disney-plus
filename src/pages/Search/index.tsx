@@ -50,7 +50,7 @@ export default function Search() {
                 <div
                   className="movie__column-poster"
                   onClick={() => {
-                    navigate(`${movie.id}`);
+                    navigate(`/${movie.id}`);
                   }}
                 >
                   <img
