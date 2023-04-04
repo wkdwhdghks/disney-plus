@@ -73,6 +73,7 @@ export default function Nav(): JSX.Element {
       .then(() => {
         setUserData({} as any);
         navigate(`/`);
+        localStorage.removeItem("userData");
       })
       .catch((error) => {
         console.log(error);
@@ -86,7 +87,11 @@ export default function Nav(): JSX.Element {
           src="/images/logo.svg"
           alt="Disney Plus Logo"
           onClick={() => {
-            window.location.href = "/";
+            if (localStorage.getItem("userData")) {
+              window.location.href = "/main";
+            } else {
+              return "";
+            }
           }}
         />
       </Logo>
