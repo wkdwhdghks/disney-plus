@@ -2,6 +2,7 @@ import axios from "../../api/axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import "./Search.css";
+import useDebounce from "../../hooks/useDebounce";
 
 export default function Search() {
   interface MovieInfo {
@@ -10,6 +11,7 @@ export default function Search() {
     id: number;
   }
   const [searchResults, setSearchResults] = useState<MovieInfo[]>([]);
+  const navigate = useNavigate();
 
   const useQuery = () => {
     return new URLSearchParams(useLocation().search);
@@ -17,13 +19,13 @@ export default function Search() {
 
   let query = useQuery();
   const searchTerm = query.get("q");
-  const navigate = useNavigate();
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   useEffect(() => {
-    if (searchTerm) {
-      fetchSearchMovie(searchTerm);
+    if (debouncedSearchTerm) {
+      fetchSearchMovie(debouncedSearchTerm);
     }
-  }, [searchTerm]);
+  }, [debouncedSearchTerm]);
 
   const fetchSearchMovie = async (searchTerm: string) => {
     try {
