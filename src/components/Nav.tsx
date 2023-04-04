@@ -14,10 +14,13 @@ export default function Nav(): JSX.Element {
     photoURL: string | undefined;
     displayName: string | undefined;
   }
+  const initialUSerData = localStorage.getItem("userData")
+    ? JSON.parse(localStorage.getItem("userData") as string)
+    : undefined;
+
   const [show, setShow] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
-  const [userData, setUserData] = useState<User>();
-
+  const [userData, setUserData] = useState<User>(initialUSerData);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
@@ -58,6 +61,7 @@ export default function Nav(): JSX.Element {
     signInWithPopup(auth, provider)
       .then((result) => {
         setUserData(result.user as any);
+        localStorage.setItem("userData", JSON.stringify(result.user));
       })
       .catch((error) => {
         console.log(error);
@@ -67,7 +71,7 @@ export default function Nav(): JSX.Element {
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
-        setUserData(undefined);
+        setUserData({} as any);
         navigate(`/`);
       })
       .catch((error) => {
