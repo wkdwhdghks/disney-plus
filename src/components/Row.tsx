@@ -74,7 +74,7 @@ export default function Row({
       >
         <Content id={id}>
           {movies.map((movie) => (
-            <SwiperSlide>
+            <SwiperSlide key={movie.id}>
               <Wrap>
                 <img
                   key={movie.id}
