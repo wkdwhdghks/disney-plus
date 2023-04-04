@@ -6,11 +6,18 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
+  signOut,
 } from "firebase/auth";
 
 export default function Nav(): JSX.Element {
+  interface User {
+    photoURL: string | undefined;
+    displayName: string | undefined;
+  }
   const [show, setShow] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
+  const [userData, setUserData] = useState<User>();
+
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
@@ -25,7 +32,7 @@ export default function Nav(): JSX.Element {
         navigate("/");
       }
     });
-  }, []);
+  }, [navigate, pathname]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -49,7 +56,20 @@ export default function Nav(): JSX.Element {
 
   const handleAuth = () => {
     signInWithPopup(auth, provider)
-      .then((result) => {})
+      .then((result) => {
+        setUserData(result.user as any);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        setUserData(undefined);
+        navigate(`/`);
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -69,17 +89,64 @@ export default function Nav(): JSX.Element {
       {pathname === "/" ? (
         <Login onClick={handleAuth}>Login</Login>
       ) : (
-        <Input
-          className="nav__input"
-          type="text"
-          placeholder="검색해주세요"
-          value={searchValue}
-          onChange={handleChange}
-        />
+        <>
+          <Input
+            className="nav__input"
+            type="text"
+            placeholder="검색해주세요"
+            value={searchValue}
+            onChange={handleChange}
+          />
+
+          <SingnOut>
+            <UserImg src={userData?.photoURL} alt={userData?.displayName} />
+            <DropDown>
+              <span onClick={handleSignOut}>Sign Out</span>
+            </DropDown>
+          </SingnOut>
+        </>
       )}
     </NavWrapper>
   );
 }
+
+const DropDown = styled.div`
+  position: absolute;
+  top: 48px;
+  right: 0px;
+  background: rgb(19, 19, 19);
+  border: 1px solid rgba(151, 151, 151, 0.34);
+  border-radius: 4px;
+  box-shadow: rgb(0 0 0 / 50%) 0px 0px 18px 0px;
+  padding: 10px;
+  font-size: 14px;
+  letter-spacing: 3px;
+  width: 100%;
+  opacity: 0;
+`;
+
+const SingnOut = styled.div`
+  position: relative;
+  height: 48px;
+  width: 48px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    ${DropDown} {
+      opacity: 1;
+      transition-duration: 1s;
+    }
+  }
+`;
+
+const UserImg = styled.img`
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+`;
 
 const Login = styled.a`
   background-color: rgba(0, 0, 0, 0.6);

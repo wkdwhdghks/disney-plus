@@ -8,13 +8,11 @@ export default function Detail(): JSX.Element {
   }
 
   let { movieId } = useParams();
-  console.log(movieId);
   const [movie, setMovie] = useState<MovieInfo>();
 
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get(`/movie/${movieId}`);
-      console.log(response);
       setMovie(response.data);
     }
     fetchData();
